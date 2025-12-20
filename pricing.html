@@ -7,8 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/styles.css">
     <script>
-        // Check if user is logged in, if not redirect to login
-        if (!localStorage.getItem("user")) {
+        // التعديل: فحص التسجيل باستخدام المفاتيح الجديدة والقديمة لضمان الأمان
+        const userId = localStorage.getItem("user_id");
+        const userBackup = localStorage.getItem("user");
+
+        if (!userId && !userBackup) {
+            // لو مش لاقي أي دليل على تسجيل الدخول، يرجعه لصفحة الـ login
             window.location.href = "login.html";
         }
     </script>
@@ -119,19 +123,21 @@
     </main>
 
     <script>
-        // Custom Plan Calculator Logic
+        // دالة حساب السعر المخصص
         function calculateCustomPrice() {
             const credits = document.getElementById('customCredits').value;
-            // Assuming base rate of $0.008 per credit for custom orders
             const price = (credits * 0.008).toFixed(2);
             document.getElementById('customPrice').innerText = `$${price}`;
         }
 
+        // دالة اختيار الخطة
         function selectPlan(planName) {
-            alert(`You have selected the ${planName} Plan. \nRedirecting to payment gateway... (Mockup)`);
+            // حالياً بتعرض تنبيه، وممكن تربطها بـ API الدفع مستقبلاً
+            alert(`Plan Selected: ${planName}\nRedirecting to Dashboard...`);
+            window.location.href = "dashboard.html";
         }
 
-        // Initialize calc
+        // تشغيل الحساب المبدئي
         calculateCustomPrice();
     </script>
 </body>
