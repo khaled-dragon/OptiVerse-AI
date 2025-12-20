@@ -1,10 +1,13 @@
-const API_BASE = "http://localhost:5000";
+// تم تغيير العنوان من localhost إلى رابط Hugging Face الخاص بك
+const API_BASE = "https://khaled135-optiverse-backend.hf.space";
 
 async function apiRequest(endpoint, method = "GET", body = null, isFormData = false) {
     const options = {
         method,
+        // عند إرسال الصور (FormData) نترك المتصفح يضع الـ headers تلقائياً
         headers: isFormData ? {} : { "Content-Type": "application/json" },
     };
+    
     if (body) options.body = isFormData ? body : JSON.stringify(body);
 
     try {
