@@ -10,16 +10,21 @@ if (loginForm) {
         const originalText = btn.innerHTML;
 
         // UI Loading State
-        btn.innerHTML = `<div class="loader w-5 h-5 border-2"></div>`;
+        btn.innerHTML = `<div class="loader w-5 h-5 border-2 animate-spin rounded-full border-t-transparent"></div>`;
         btn.disabled = true;
 
+        // استدعاء الـ API باستخدام الدالة التي عدلناها في api.js
         const response = await apiRequest('/login', 'POST', { email, password });
 
         if (response.user_id) {
-            // Save user session
-            localStorage.setItem('user', JSON.stringify(response));
+            // حفظ بيانات الجلسة
+            localStorage.setItem('user_id', response.user_id);
+            localStorage.setItem('user_name', response.name);
+            localStorage.setItem('user_data', JSON.stringify(response));
+            
             window.location.href = 'dashboard.html';
         } else {
+            // إظهار الخطأ الراجع من Flask
             alert(response.error || "Login failed. Please check your credentials.");
             btn.innerHTML = originalText;
             btn.disabled = false;
@@ -39,11 +44,11 @@ if (signupForm) {
         const accountType = document.getElementById('accountType').value;
         const btn = signupForm.querySelector('button');
         
-        // UI Loading State
         const originalText = btn.innerHTML;
         btn.innerHTML = "Creating Account...";
         btn.disabled = true;
 
+        // إرسال بيانات التسجيل لـ Flask
         const response = await apiRequest('/signup', 'POST', {
             fullName,
             email,
