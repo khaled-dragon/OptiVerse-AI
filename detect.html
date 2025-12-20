@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Detection | OptiVerse AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
+    
+    <div class="max-w-xl w-full glass rounded-3xl p-8 slide-up relative">
+        <a href="dashboard.html" class="absolute top-6 left-6 text-slate-400 hover:text-white">&larr; Back</a>
+        
+        <h2 class="text-2xl font-bold text-center mb-8">Analyze Retinal Scan</h2>
+        
+        <form id="uploadForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-400 mb-2">Patient ID</label>
+                <input type="text" id="patientId" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 transition">
+            </div>
+
+            <div class="border-2 border-dashed border-slate-600 rounded-2xl p-10 text-center hover:bg-slate-800/50 transition relative">
+                <input type="file" id="imageInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
+                <div id="uploadPlaceholder">
+                    <div class="text-4xl mb-3">👁️</div>
+                    <p class="text-slate-300 font-medium">Click to upload or drag image</p>
+                    <p class="text-slate-500 text-sm mt-1">Supports PNG, JPG (Max 5MB)</p>
+                </div>
+                <img id="preview" class="hidden max-h-48 mx-auto rounded-lg shadow-lg" />
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-600/20 transition flex justify-center items-center">
+                <span id="btnText">Run Analysis</span>
+                <div id="loader" class="loader ml-3 hidden w-6 h-6 border-2"></div>
+            </button>
+        </form>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/detect.js"></script>
+</body>
+</html>

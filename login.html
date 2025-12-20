@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | OptiVerse AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen relative overflow-hidden">
+    
+    <div class="absolute top-0 left-0 w-full h-full bg-pattern pointer-events-none"></div>
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px]"></div>
+
+    <div class="glass p-10 rounded-3xl w-full max-w-md slide-up relative z-10 shadow-2xl shadow-black/50">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-slate-400">Access your medical dashboard</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-slate-300 text-sm font-medium mb-2">Email Address</label>
+                <input type="email" id="email" required 
+                    class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-slate-500"
+                    placeholder="doctor@hospital.com">
+            </div>
+
+            <div>
+                <label class="block text-slate-300 text-sm font-medium mb-2">Password</label>
+                <input type="password" id="password" required 
+                    class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-slate-500"
+                    placeholder="••••••••">
+            </div>
+
+            <button type="submit" 
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl transition shadow-lg shadow-blue-600/25 flex justify-center items-center gap-2 group">
+                <span>Sign In</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+        </form>
+
+        <p class="text-center text-slate-400 mt-6 text-sm">
+            Don't have an account? 
+            <a href="signup.html" class="text-blue-400 hover:text-blue-300 font-medium transition">Sign up</a>
+        </p>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

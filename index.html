@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiVerse AI | Retinal Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-900 relative">
+    <div class="absolute inset-0 bg-pattern pointer-events-none"></div>
+    
+    <nav class="flex justify-between items-center p-6 glass sticky top-0 z-50">
+        <div class="text-2xl font-bold text-blue-500 tracking-wide">OptiVerse<span class="text-white">AI</span></div>
+        
+        <div id="authLinks" class="space-x-4">
+            <a href="login.html" class="text-slate-300 hover:text-white transition">Login</a>
+            <a href="signup.html" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full transition shadow-lg shadow-blue-500/30">Get Started</a>
+        </div>
+
+        <div id="userLinks" class="hidden items-center gap-4">
+            <a href="pricing.html" class="text-yellow-400 hover:text-yellow-300 font-semibold transition flex items-center gap-1 border border-transparent hover:border-yellow-500/30 px-3 py-1 rounded-lg">
+                ★ Choose a Plan
+            </a>
+            <a href="dashboard.html" class="glass px-5 py-2 rounded-full text-white hover:bg-slate-700 transition border border-slate-600">
+                Dashboard &rarr;
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
+        <div class="slide-up">
+            <span class="bg-slate-800 text-blue-400 px-3 py-1 rounded-full text-sm font-semibold border border-slate-700">Next Gen Healthcare</span>
+            <h1 class="text-5xl md:text-7xl font-bold mt-6 mb-6 leading-tight">
+                AI-Powered <span class="text-blue-500">Retinal</span> <br> Disease Detection
+            </h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10">
+                Empowering doctors with clinical-grade artificial intelligence to detect diabetic retinopathy and other anomalies in seconds.
+            </p>
+            <div class="flex gap-4 justify-center">
+                <a href="signup.html" class="bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-700 transition shadow-xl shadow-blue-600/20">Start Free Trial</a>
+                <a href="#demo" class="glass text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-slate-800 transition">View Demo</a>
+            </div>
+        </div>
+        
+        <div class="mt-20 fade-in delay-300">
+             <div class="w-64 h-64 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-400 blur-[100px] opacity-40 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10"></div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = localStorage.getItem("user");
+            
+            if (user) {
+                // لو المستخدم مسجل دخول
+                document.getElementById("authLinks").classList.add("hidden"); // اخفي Login
+                
+                const userLinks = document.getElementById("userLinks");
+                userLinks.classList.remove("hidden"); // اظهر Dashboard + Plans
+                userLinks.classList.add("flex");      // ظبط ال Layout
+            }
+        });
+    </script>
+</body>
+</html>

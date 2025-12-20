@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | OptiVerse AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100">
+    <div class="flex h-screen overflow-hidden">
+        
+        <aside class="w-64 glass hidden md:flex flex-col p-6 border-r border-slate-800">
+            <div class="text-2xl font-bold text-blue-500 mb-10">OptiVerse<span class="text-white">AI</span></div>
+            <nav class="space-y-4 flex-1">
+                <a href="#" class="block bg-slate-800 text-white px-4 py-3 rounded-xl">Dashboard</a>
+                <a href="#" class="block text-slate-400 hover:text-white px-4 py-3 transition">Patient Records</a>
+                <a href="#" class="block text-slate-400 hover:text-white px-4 py-3 transition">Settings</a>
+            </nav>
+            <button onclick="logout()" class="text-left text-red-400 hover:text-red-300 mt-auto">Sign Out</button>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto p-8 relative">
+            
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 slide-up gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold">Welcome back, <span id="doctorName" class="text-blue-400">Dr. User</span></h2>
+                    <p class="text-slate-400">Here is your daily medical overview.</p>
+                </div>
+                
+                <div class="flex gap-3">
+                    <a href="pricing.html" class="glass text-yellow-400 hover:text-yellow-300 px-6 py-3 rounded-xl border-yellow-500/30 hover:bg-yellow-500/10 transition flex items-center gap-2 font-semibold shadow-lg shadow-yellow-500/10">
+                        <span>★ Choose a Plan</span>
+                    </a>
+
+                    <a href="detect.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-500/20 transition flex items-center gap-2">
+                        <span>+ New Detection</span>
+                    </a>
+                </div>
+            </header>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 slide-up delay-100">
+                <div class="glass p-6 rounded-2xl">
+                    <p class="text-slate-400 text-sm">Total Scans</p>
+                    <p class="text-4xl font-bold mt-2" id="totalScans">0</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border-blue-500/30">
+                    <p class="text-slate-400 text-sm">Detected Issues</p>
+                    <p class="text-4xl font-bold mt-2 text-blue-400" id="issueCount">0</p>
+                </div>
+                <div class="glass p-6 rounded-2xl">
+                    <p class="text-slate-400 text-sm">Accuracy Rate</p>
+                    <p class="text-4xl font-bold mt-2 text-green-400">96.5%</p>
+                </div>
+            </div>
+
+            <div class="glass rounded-3xl overflow-hidden slide-up delay-200">
+                <div class="p-6 border-b border-slate-700">
+                    <h3 class="font-semibold text-lg">Recent Patient Scans</h3>
+                </div>
+                <table class="w-full text-left">
+                    <thead class="bg-slate-800 text-slate-400 uppercase text-xs">
+                        <tr>
+                            <th class="px-6 py-4">Patient ID</th>
+                            <th class="px-6 py-4">Date</th>
+                            <th class="px-6 py-4">Diagnosis</th>
+                            <th class="px-6 py-4">Confidence</th>
+                            <th class="px-6 py-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scanTableBody" class="divide-y divide-slate-800">
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

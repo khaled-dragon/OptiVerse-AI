@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis Result | OptiVerse AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-6">
+    
+    <div class="max-w-6xl mx-auto">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-slate-300">Analysis Report</h1>
+            <a href="dashboard.html" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg transition">Back to Dashboard</a>
+        </header>
+
+        <div class="glass rounded-3xl p-8 mb-8 text-center slide-up border-t-4 border-blue-500">
+            <p class="text-slate-400 uppercase tracking-widest text-sm mb-2">AI Diagnosis</p>
+            <h2 id="diagnosis" class="text-5xl font-bold mb-4">Processing...</h2>
+            <div class="inline-block bg-slate-800 px-4 py-2 rounded-full">
+                <span class="text-slate-400">Confidence Score:</span>
+                <span id="confidence" class="text-blue-400 font-bold ml-2">--%</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 slide-up delay-100">
+            
+            <div class="glass rounded-[30px] p-6 h-96 flex flex-col relative overflow-hidden group">
+                <h3 class="text-lg font-semibold mb-4 z-10">Lesion Heatmap</h3>
+                <div class="flex-1 bg-slate-800 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-red-500/20 to-transparent z-0"></div>
+                    <p class="text-slate-500 z-10">Heatmap Overlay Visualization</p>
+                </div>
+            </div>
+
+            <div class="glass rounded-[30px] p-6 h-96 flex flex-col">
+                <h3 class="text-lg font-semibold mb-4">3D Structure Analysis</h3>
+                <div class="flex-1 bg-slate-800 rounded-2xl flex items-center justify-center border border-slate-700">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 animate-pulse">🧊</div>
+                        <p class="text-slate-500">3D Depth Map Rendering</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-center text-slate-500 mt-10 text-sm">
+            Disclaimer: This AI system supports clinical decision-making and does not replace professional diagnosis.
+        </p>
+    </div>
+
+    <script>
+        // Simple inline script to populate results
+        const result = JSON.parse(localStorage.getItem('lastResult'));
+        if(result) {
+            document.getElementById('diagnosis').textContent = result.diagnosis;
+            document.getElementById('confidence').textContent = (result.confidence * 100).toFixed(1) + "%";
+            
+            if(result.diagnosis.includes("Healthy")) {
+                document.getElementById('diagnosis').classList.add("text-green-400");
+            } else {
+                document.getElementById('diagnosis').classList.add("text-red-400");
+            }
+        }
+    </script>
+</body>
+</html>
