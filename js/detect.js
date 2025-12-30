@@ -20,8 +20,11 @@ imageInput.addEventListener('change', function() {
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const user = JSON.parse(localStorage.getItem("user"));
-    const patientId = document.getElementById('patientId').value;
+    // جلب بيانات المستخدم من localStorage مع التأكد من وجودها
+    const userStr = localStorage.getItem("user");
+    const user = userStr ? JSON.parse(userStr) : { user_id: 1 };
+    
+    const patientId = document.getElementById('patientId').value || "Unknown";
     const file = imageInput.files[0];
     
     if(!file) return alert("Please select an image");
@@ -32,19 +35,38 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     btnText.textContent = "Processing...";
     loader.classList.remove('hidden');
 
+    // تجهيز البيانات لإرسالها للـ Backend
     const formData = new FormData();
     formData.append('image', file);
     formData.append('user_id', user.user_id);
     formData.append('patient_id', patientId);
 
-    const result = await apiRequest('/predict', 'POST', formData, true);
+    try {
+        // --- التعديل الجوهري هنا ---
+        // بنكلم رابط Hugging Face مباشرة بدل apiRequest
+        const response = await fetch('https://khaled135-optiverse-backend.hf.space/predict', {
+            method: 'POST',
+            body: formData
+            // ملاحظة: لا نضع Headers يدوية هنا لأن المتصفح سيقوم بضبط Boundary الـ FormData تلقائياً
+        });
 
-    if (result.diagnosis) {
-        // Save result to local storage to display on result page
-        localStorage.setItem('lastResult', JSON.stringify(result));
-        window.location.href = 'result.html';
-    } else {
-        alert("Analysis failed. Please try again.");
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.diagnosis) {
+            // حفظ النتيجة لعرضها في صفحة result.html
+            localStorage.setItem('lastResult', JSON.stringify(result));
+            window.location.href = 'result.html';
+        } else {
+            throw new Error("Diagnosis not found in response");
+        }
+
+    } catch (error) {
+        console.error("API Error:", error);
+        alert("Analysis failed: " + error.message);
         btnText.textContent = "Run Analysis";
         loader.classList.add('hidden');
     }
