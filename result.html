@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Analysis Result | OptiVerse AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-slate-900 text-white min-h-screen p-6">
@@ -33,13 +34,21 @@
                 </div>
             </div>
 
-            <div class="glass rounded-[30px] p-6 h-96 flex flex-col">
+            <div class="glass rounded-[30px] p-6 h-96 flex flex-col relative overflow-hidden">
                 <h3 class="text-lg font-semibold mb-4">3D Structure Analysis</h3>
-                <div class="flex-1 bg-slate-800 rounded-2xl flex items-center justify-center border border-slate-700">
-                    <div class="text-center">
-                        <div class="text-6xl mb-4 animate-pulse">🧊</div>
-                        <p class="text-slate-500">3D Depth Map Rendering</p>
-                    </div>
+                <div class="flex-1 bg-slate-800 rounded-2xl relative">
+                    <model-viewer 
+                        id="tripoViewer" 
+                        camera-controls 
+                        auto-rotate 
+                        shadow-intensity="1" 
+                        class="w-full h-full bg-transparent"
+                        ar>
+                        <div id="modelLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-800 rounded-2xl z-20">
+                            <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                            <p class="text-slate-400 text-sm">Generating 3D Object...</p>
+                        </div>
+                    </model-viewer>
                 </div>
             </div>
         </div>
@@ -50,8 +59,11 @@
     </div>
 
     <script>
-        // Simple inline script to populate results
         const result = JSON.parse(localStorage.getItem('lastResult'));
+        const viewer = document.getElementById('tripoViewer');
+        const loader = document.getElementById('modelLoader');
+        const apiKey = "tsk_tF1Fd1ls27InQfhZ2Y3uMHMGNdvXwPG8Y0ov7x9XVIz";
+
         if(result) {
             document.getElementById('diagnosis').textContent = result.diagnosis;
             document.getElementById('confidence').textContent = (result.confidence * 100).toFixed(1) + "%";
@@ -61,6 +73,34 @@
             } else {
                 document.getElementById('diagnosis').classList.add("text-red-400");
             }
+
+            if(result.tripo_task_id) {
+                pollTripoStatus(result.tripo_task_id);
+            }
+        }
+
+        async function pollTripoStatus(taskId) {
+            const checkUrl = `https://api.tripo3d.ai/v2/openapi/task/${taskId}`;
+            
+            const interval = setInterval(async () => {
+                try {
+                    const res = await fetch(checkUrl, {
+                        headers: { 'Authorization': `Bearer ${apiKey}` }
+                    });
+                    const data = await res.json();
+
+                    if (data.data.status === 'success') {
+                        clearInterval(interval);
+                        viewer.src = data.data.output.model;
+                        loader.classList.add('hidden');
+                    } else if (data.data.status === 'failed') {
+                        clearInterval(interval);
+                        loader.innerHTML = '<p class="text-red-500 text-sm">3D Generation Failed</p>';
+                    }
+                } catch (err) {
+                    console.error("3D Error:", err);
+                }
+            }, 5000);
         }
     </script>
 </body>
