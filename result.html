@@ -62,7 +62,6 @@
         const result = JSON.parse(localStorage.getItem('lastResult'));
         const viewer = document.getElementById('tripoViewer');
         const loader = document.getElementById('modelLoader');
-        const apiKey = "tsk_tF1Fd1ls27InQfhZ2Y3uMHMGNdvXwPG8Y0ov7x9XVIz";
 
         if(result) {
             document.getElementById('diagnosis').textContent = result.diagnosis;
@@ -80,20 +79,18 @@
         }
 
         async function pollTripoStatus(taskId) {
-            const checkUrl = `https://api.tripo3d.ai/v2/openapi/task/${taskId}`;
+            const checkUrl = `http://127.0.0.1:7860/check-3d-status/${taskId}`;
             
             const interval = setInterval(async () => {
                 try {
-                    const res = await fetch(checkUrl, {
-                        headers: { 'Authorization': `Bearer ${apiKey}` }
-                    });
+                    const res = await fetch(checkUrl);
                     const data = await res.json();
 
-                    if (data.data.status === 'success') {
+                    if (data.status === 'success') {
                         clearInterval(interval);
-                        viewer.src = data.data.output.model;
+                        viewer.src = data.model_url;
                         loader.classList.add('hidden');
-                    } else if (data.data.status === 'failed') {
+                    } else if (data.status === 'failed') {
                         clearInterval(interval);
                         loader.innerHTML = '<p class="text-red-500 text-sm">3D Generation Failed</p>';
                     }
