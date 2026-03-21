@@ -1,4 +1,3 @@
-// Handle Login Logic
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -15,12 +14,11 @@ if (loginForm) {
         const response = await apiRequest('/login', 'POST', { email, password });
 
         if (response.user_id) {
-            // --- التعديل هنا لضمان عمل كل الصفحات ---
+
             localStorage.setItem('user_id', response.user_id);
             localStorage.setItem('user_name', response.name);
             localStorage.setItem('user_data', JSON.stringify(response));
             
-            // إضافة هذا السطر لأن صفحة الـ Pricing والصفحات القديمة تبحث عن "user"
             localStorage.setItem('user', JSON.stringify(response)); 
             
             window.location.href = 'dashboard.html';
@@ -32,7 +30,6 @@ if (loginForm) {
     });
 }
 
-// Handle Signup Logic
 const signupForm = document.getElementById('signupForm');
 if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
