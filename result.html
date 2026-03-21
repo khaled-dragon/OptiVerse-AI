@@ -46,7 +46,7 @@
                         ar>
                         <div id="modelLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-800 rounded-2xl z-20">
                             <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                            <p class="text-slate-400 text-sm">Generating 3D Object...</p>
+                            <p id="loaderStatus" class="text-slate-400 text-sm">Generating 3D Object...</p>
                         </div>
                     </model-viewer>
                 </div>
@@ -62,6 +62,7 @@
         const result = JSON.parse(localStorage.getItem('lastResult'));
         const viewer = document.getElementById('tripoViewer');
         const loader = document.getElementById('modelLoader');
+        const loaderStatus = document.getElementById('loaderStatus');
 
         if(result) {
             document.getElementById('diagnosis').textContent = result.diagnosis;
@@ -90,14 +91,20 @@
                         clearInterval(interval);
                         viewer.src = data.model_url;
                         loader.classList.add('hidden');
+                    } else if (data.status === 'processing') {
+                        const progress = data.progress || 0;
+                        loaderStatus.innerText = `Generating 3D Object: ${progress}%`;
                     } else if (data.status === 'failed') {
                         clearInterval(interval);
-                        loader.innerHTML = '<p class="text-red-500 text-sm">3D Generation Failed</p>';
+                        loader.innerHTML = `
+                            <p class="text-red-500 text-sm font-semibold">3D Generation Failed</p>
+                            <p class="text-slate-500 text-xs mt-1">Reason: ${data.reason || 'Technical Issue'}</p>
+                        `;
                     }
                 } catch (err) {
                     console.error("3D Error:", err);
                 }
-            }, 5000);
+            }, 3000);
         }
     </script>
 </body>
