@@ -1,20 +1,16 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // جلب البيانات المخزنة من localStorage
     const userId = localStorage.getItem("user_id");
     const userName = localStorage.getItem("user_name");
 
-    // التحقق من وجود مستخدم مسجل
     if (!userId) {
         window.location.href = "login.html";
         return;
     }
 
-    // عرض اسم الدكتور في الواجهة
     const doctorNameEl = document.getElementById("doctorName");
     if (doctorNameEl) doctorNameEl.textContent = userName || "Doctor";
 
-    // جلب سجل الفحوصات من السيرفر (Hugging Face)
-    // apiRequest سيستخدم التلقائيا الـ API_BASE الجديد الذي وضعناه في api.js
+    
     const scans = await apiRequest(`/patients/${userId}`);
     
     const tableBody = document.getElementById("scanTableBody");
@@ -26,11 +22,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (Array.isArray(scans)) {
         totalScansEl.textContent = scans.length;
         
-        // مسح الجدول قبل الإضافة لضمان عدم التكرار
         tableBody.innerHTML = "";
 
         scans.forEach(scan => {
-            // منطق حساب الحالات المصابة بناءً على رد الموديل في model.py
+
             if (scan.diagnosis !== "Healthy" && scan.diagnosis !== "Healthy Retina") {
                 issues++;
             }
@@ -57,14 +52,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         issueCountEl.textContent = issues;
     } else {
-        // في حالة لا يوجد بيانات أو حدث خطأ
         totalScansEl.textContent = "0";
         issueCountEl.textContent = "0";
         tableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-500">No medical records found.</td></tr>`;
     }
 });
 
-// دالة تسجيل الخروج
 function logout() {
     localStorage.clear(); // مسح كل بيانات الجلسة
     window.location.href = "index.html";
