@@ -68,7 +68,7 @@
             document.getElementById('diagnosis').textContent = result.diagnosis;
             document.getElementById('confidence').textContent = (result.confidence * 100).toFixed(1) + "%";
             
-            if(result.diagnosis.includes("Healthy")) {
+            if(result.diagnosis.toLowerCase().includes("healthy")) {
                 document.getElementById('diagnosis').classList.add("text-green-400");
             } else {
                 document.getElementById('diagnosis').classList.add("text-red-400");
@@ -76,7 +76,12 @@
 
             if(result.tripo_task_id) {
                 pollTripoStatus(result.tripo_task_id);
+            } else {
+                loader.innerHTML = '<p class="text-slate-500 text-sm">3D Generation not available for this scan</p>';
             }
+        } else {
+            document.getElementById('diagnosis').textContent = "No Data Found";
+            loader.innerHTML = '<p class="text-red-500 text-sm">Error: No analysis data available</p>';
         }
 
         async function pollTripoStatus(taskId) {
@@ -85,6 +90,8 @@
             const interval = setInterval(async () => {
                 try {
                     const res = await fetch(checkUrl);
+                    if (!res.ok) throw new Error("Connection lost");
+                    
                     const data = await res.json();
 
                     if (data.status === 'success') {
@@ -103,6 +110,7 @@
                     }
                 } catch (err) {
                     console.error("3D Error:", err);
+                    // لا يتم مسح الـ Interval هنا للسماح بإعادة المحاولة عند حدوث خطأ مؤقت في الشبكة
                 }
             }, 3000);
         }
