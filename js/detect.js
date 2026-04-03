@@ -1,28 +1,9 @@
-const imageInput = document.getElementById('imageInput');
-const preview = document.getElementById('preview');
-const placeholder = document.getElementById('uploadPlaceholder');
-
-imageInput.addEventListener('change', function() {
-    const file = this.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-            placeholder.classList.add('hidden');
-        }
-        reader.readAsDataURL(file);
-    }
-});
-
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    const userStr = localStorage.getItem("user");
-    const user = userStr ? JSON.parse(userStr) : { user_id: 1 };
-    const patientId = document.getElementById('patientId').value || "Unknown";
+    console.log("Submit button clicked..."); // عشان نتأكد إن الفانكشن بدأت
+
+    const imageInput = document.getElementById('imageInput');
     const file = imageInput.files[0];
-    
     if(!file) return alert("Please select an image");
 
     const btnText = document.getElementById('btnText');
@@ -32,29 +13,39 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
 
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('user_id', user.user_id);
-    formData.append('patient_id', patientId);
+    formData.append('user_id', '1'); 
+    formData.append('patient_id', document.getElementById('patientId').value || "Unknown");
 
     try {
+        console.log("Sending request to HF...");
         const response = await fetch('https://khaled135-optiverse-backend.hf.space/predict', {
             method: 'POST',
-            body: formData
+            body: formData,
+            // متبعتش أي Headers يدوية هنا، المتصفح هيظبطها
         });
 
-        if (!response.ok) throw new Error(`Server error: ${response.status}`);
+        console.log("Response Status:", response.status);
+
+        if (!response.ok) {
+            const errorTxt = await response.text();
+            throw new Error(`Server Error (${response.status}): ${errorTxt}`);
+        }
 
         const result = await response.json();
+        console.log("Server Result:", result);
 
-        if (result.diagnosis) {
+        if (result.status === "success" || result.diagnosis) {
             localStorage.setItem('lastResult', JSON.stringify(result));
-            window.location.href = 'result.html';
+            alert("Analysis Complete! Redirecting...");
+            window.location.href = 'result.html'; 
         } else {
-            throw new Error("Diagnosis not found in response");
+            throw new Error("Invalid response format from server");
         }
 
     } catch (error) {
-        console.error("API Error:", error);
-        alert("Analysis failed: " + error.message);
+        console.error("FULL ERROR DETAILS:", error);
+        alert("Failed: " + error.message);
+    } finally {
         btnText.textContent = "Run Analysis";
         loader.classList.add('hidden');
     }
